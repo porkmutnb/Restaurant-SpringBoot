@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/util")
+@CrossOrigin(origins = "http://localhost:4200")
 public class UtilController {
 
     @Autowired
@@ -21,7 +22,9 @@ public class UtilController {
     @GetMapping("/findByConfig/{configName}")
     public ResponseEntity<ResponsePayload> findByConfig(@RequestHeader(value = "token", required = false) String token, @PathVariable("configName") String configName) {
         try {
-            authService.tokenIsAvailable(token);
+            if(!configName.equalsIgnoreCase("Gender")) {
+                authService.tokenIsAvailable(token);
+            }
             ResponsePayload res = new ResponsePayload();
             res.setCode(200);
             res.setMessage("Success");

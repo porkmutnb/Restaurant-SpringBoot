@@ -41,10 +41,11 @@ public class AuthService {
     public User login(AuthenModel req) throws Exception {
         Date nowdate = new Date();
         if(req.getToken()==null || req.getToken().isEmpty()) {
-            User user = authRepository.login(req.getUsername(), utilService.encodeMD5(req.getPassword())).get(0);
-            if(user==null) {
+            List<User> users = authRepository.login(req.getUsername(), utilService.encodeMD5(req.getPassword()));
+            if(users.size()==0) {
                 throw new ExceptionInInitializerError("Not found login, please login try again");
             }else {
+                User user = users.get(0);
                 String originalToken = user.getId().toString()+"|"+user.getUsername()+"|"+new SimpleDateFormat("yyyy-MM-dd H:m:s").format(nowdate);
                 user.setToken(utilService.encodeToken(originalToken));
                 authRepository.save(user);
@@ -52,10 +53,11 @@ public class AuthService {
                 return user;
             }
         }else {
-            User user = authRepository.findByToken(req.getToken()).get(0);
-            if(user==null) {
+            List<User> users = authRepository.findByToken(req.getToken());
+            if(users.size()==0) {
                 throw new ExceptionInInitializerError("Not found login, please login try again");
             }else {
+                User user = users.get(0);
                 userId = user.getId();
                 String checkToken = utilService.decodeToken(user.getToken());
                 String[] splitToken = checkToken.split("\\|");
@@ -79,7 +81,7 @@ public class AuthService {
         model.setPassword(utilService.encodeMD5(req.getPassword()));
         model.setFullname(req.getFullname());
         model.setGenderId(utilService.isGenderExists(req.getGenderId()));
-        model.setBirthdate(req.getBirthdate());
+        model.setBirthdate(new SimpleDateFormat("yyyy-MM-dd", Locale.US).parse(req.getBirthdate()));
         model.setCreateDate(nowdate);
         return authRepository.save(model);
     }

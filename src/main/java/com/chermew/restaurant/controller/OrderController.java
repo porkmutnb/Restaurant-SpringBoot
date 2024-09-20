@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/order")
+@CrossOrigin(origins = "http://localhost:4200")
 public class OrderController {
 
     @Autowired
@@ -19,6 +20,23 @@ public class OrderController {
 
     @Autowired
     private AuthService authService;
+
+    @GetMapping(value = {"/get","/get/{id}"})
+    public ResponseEntity<ResponsePayload> getOrder(@RequestHeader(value = "token", required = false) String token, @PathVariable(value = "id", required = false) Integer id)  {
+        try {
+            authService.tokenIsAvailable(token);
+            ResponsePayload res = new ResponsePayload();
+            res.setCode(200);
+            res.setMessage("Success");
+            res.setData(id==null ? orderService.findAll() : orderService.findById(id));
+            return new ResponseEntity<ResponsePayload>(res, HttpStatus.OK);
+        } catch (Exception|ExceptionInInitializerError e) {
+            ResponsePayload res = new ResponsePayload();
+            res.setCode(500);
+            res.setMessage(e.getMessage());
+            return new ResponseEntity<ResponsePayload>(res, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
     @PostMapping("/add")
     public ResponseEntity<ResponsePayload> addOrder(@RequestHeader(value = "token", required = false) String token, @RequestBody OrderModel req) {

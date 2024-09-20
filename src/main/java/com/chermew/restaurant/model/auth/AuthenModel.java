@@ -10,6 +10,6 @@ public class AuthenModel {
     private String password;
     private String fullname;
     private Integer genderId;
-    private Date birthdate;
+    private String birthdate;
     private String token;
 }

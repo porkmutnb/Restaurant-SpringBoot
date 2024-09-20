@@ -14,8 +14,8 @@ public class Order {
     @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer id;
-    @Column(name = "user_id")
-    private Integer userId;
+    @Column(name = "fullname")
+    private String fullname;
     @Column(name = "status", nullable = false, columnDefinition = "varchar(255) default 'Waiting'")
     private String status;
     @Column(name = "guest")
