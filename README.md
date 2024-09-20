@@ -2,7 +2,7 @@
 Make for learning
 Restfull API using JavaSpringBoot
 
-Make Database Structure
+Create Database Structure
 
 CREATE TABLE `tb_user` (
   `id` int NOT NULL AUTO_INCREMENT,
