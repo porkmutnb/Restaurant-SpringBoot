@@ -20,7 +20,7 @@ public class ServeTableController {
     private AuthService authService;
 
     @GetMapping(value = {"/get","/get/{id}"})
-    public ResponseEntity<ResponsePayload> getMenu(@RequestHeader("token") String token, @PathVariable(value = "id", required = false) Integer id)  {
+    public ResponseEntity<ResponsePayload> getMenu(@RequestHeader(value = "token", required = false) String token, @PathVariable(value = "id", required = false) Integer id)  {
         try {
             authService.tokenIsAvailable(token);
             ResponsePayload res = new ResponsePayload();
@@ -37,7 +37,7 @@ public class ServeTableController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<ResponsePayload> addMenu(@RequestHeader("token") String token, @RequestBody ServeTable req) {
+    public ResponseEntity<ResponsePayload> addMenu(@RequestHeader(value = "token", required = false) String token, @RequestBody ServeTable req) {
         try {
             authService.tokenIsAvailable(token);
             ResponsePayload res = new ResponsePayload();
@@ -55,7 +55,7 @@ public class ServeTableController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<ResponsePayload> updateMenu(@RequestHeader("token") String token, @PathVariable Integer id, @RequestBody ServeTable req) {
+    public ResponseEntity<ResponsePayload> updateMenu(@RequestHeader(value = "token", required = false) String token, @PathVariable Integer id, @RequestBody ServeTable req) {
         try {
             authService.tokenIsAvailable(token);
             req.setId(id);
@@ -73,7 +73,7 @@ public class ServeTableController {
     }
 
     @PatchMapping("/edit/{id}")
-    public ResponseEntity<ResponsePayload> editMenu(@RequestHeader("token") String token, @PathVariable Integer id, @RequestBody ServeTable req) {
+    public ResponseEntity<ResponsePayload> editMenu(@RequestHeader(value = "token", required = false) String token, @PathVariable Integer id, @RequestBody ServeTable req) {
         try {
             authService.tokenIsAvailable(token);
             req.setId(id);
@@ -91,7 +91,7 @@ public class ServeTableController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<ResponsePayload> deleteMenu(@RequestHeader("token") String token, @PathVariable Integer id) {
+    public ResponseEntity<ResponsePayload> deleteMenu(@RequestHeader(value = "token", required = false) String token, @PathVariable Integer id) {
         try {
             authService.tokenIsAvailable(token);
             ResponsePayload res = new ResponsePayload();

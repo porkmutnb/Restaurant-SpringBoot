@@ -21,7 +21,7 @@ public class OrderController {
     private AuthService authService;
 
     @PostMapping("/add")
-    public ResponseEntity<ResponsePayload> addOrder(@RequestHeader("token") String token, @RequestBody OrderModel req) {
+    public ResponseEntity<ResponsePayload> addOrder(@RequestHeader(value = "token", required = false) String token, @RequestBody OrderModel req) {
         try {
             authService.tokenIsAvailable(token);
             ResponsePayload res = new ResponsePayload();
@@ -38,7 +38,7 @@ public class OrderController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<ResponsePayload> updateOrder(@RequestHeader("token") String token, @PathVariable Integer id, @RequestBody OrderModel req) {
+    public ResponseEntity<ResponsePayload> updateOrder(@RequestHeader(value = "token", required = false) String token, @PathVariable Integer id, @RequestBody OrderModel req) {
         try {
             authService.tokenIsAvailable(token);
             req.setOrderId(id);

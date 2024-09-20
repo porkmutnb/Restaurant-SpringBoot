@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 @Service
@@ -24,6 +25,9 @@ public class AuthService {
     public static Integer userId;
 
     public Boolean tokenIsAvailable(String token) throws Exception {
+        if(token==null) {
+            throw new ExceptionInInitializerError("Not found login, please login try again");
+        }
         AuthenModel model = new AuthenModel();
         model.setToken(token);
         login(model);
@@ -81,10 +85,13 @@ public class AuthService {
     }
 
     public User logout(AuthenModel req) throws Exception {
-        String checkToken = utilService.decodeToken(req.getToken());
-        String[] splitToken = checkToken.split("\\|");
-        User model = authRepository.findById(Integer.valueOf(splitToken[0])).get();
+        List<User> userList = authRepository.findByToken(req.getToken());
+        if(userList.size()==0) {
+            throw new ExceptionInInitializerError("please login try again");
+        }
+        User model = authRepository.findById(userList.get(0).getId()).get();
         model.setToken(null);
+        model.setUpdateDate(new Date());
         authRepository.save(model);
         return model;
     }

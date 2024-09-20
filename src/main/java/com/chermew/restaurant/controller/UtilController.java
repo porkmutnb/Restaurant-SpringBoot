@@ -1,6 +1,7 @@
 package com.chermew.restaurant.controller;
 
 import com.chermew.restaurant.model.ResponsePayload;
+import com.chermew.restaurant.service.AuthService;
 import com.chermew.restaurant.service.UtilService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,9 +15,13 @@ public class UtilController {
     @Autowired
     private UtilService utilService;
 
+    @Autowired
+    private AuthService authService;
+
     @GetMapping("/findByConfig/{configName}")
-    public ResponseEntity<ResponsePayload> findByConfig(@PathVariable("configName") String configName) {
+    public ResponseEntity<ResponsePayload> findByConfig(@RequestHeader(value = "token", required = false) String token, @PathVariable("configName") String configName) {
         try {
+            authService.tokenIsAvailable(token);
             ResponsePayload res = new ResponsePayload();
             res.setCode(200);
             res.setMessage("Success");
